@@ -83,6 +83,12 @@ test:
 #
 production:
   <<: *default
-  database: the_costco_guys_production
-  username: the_costco_guys
-  password: <%= ENV["THE_COSTCO_GUYS_DATABASE_PASSWORD"] %>
+  # database: the_costco_guys_production
+  # username: the_costco_guys
+  # password: <%= ENV["THE_COSTCO_GUYS_DATABASE_PASSWORD"] %>
+
+  database: <%= ENV['RDS_DB_NAME'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  port: <%= ENV['RDS_PORT'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
