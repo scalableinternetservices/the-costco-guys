@@ -13,4 +13,5 @@ Rails.application.routes.draw do
 
   get "login" => "session#login_form"
   post "login" => "session#handle_login"
+  get "logout" => "session#handle_logout"
 end
