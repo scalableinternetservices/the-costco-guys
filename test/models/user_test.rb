@@ -34,6 +34,13 @@ class UserTest < ActiveSupport::TestCase
     assert_includes @user.errors[:password], "can't be blank"
   end
 
+  test "should require unique username" do
+    duplicate_user = @user.dup
+    @user.save
+    assert_not duplicate_user.valid?
+    assert_includes duplicate_user.errors[:username], "has already been taken"
+  end
+
   test "should have many orders" do
     assert_respond_to @user, :orders
   end
