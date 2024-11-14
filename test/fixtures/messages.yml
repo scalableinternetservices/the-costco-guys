@@ -1,13 +1,1 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  date: 2024-11-14 06:33:34
-  content: MyText
-  from: one
-  to: one
-
-two:
-  date: 2024-11-14 06:33:34
-  content: MyText
-  from: two
-  to: two
