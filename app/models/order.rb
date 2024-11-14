@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
-  has_one :item
+  belongs_to :item
+  belong_to :user
 
-  validates :price, presence: true, numericality: { greater_than: 0 }
+  validates :quantity, presence: true, numericality: { greater_than: 0 }
 end
