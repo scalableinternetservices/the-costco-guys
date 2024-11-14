@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
   has_many :ratings
-  has_many :order
+  has_many :orders
   belongs_to :user
   
   validates :name, presence: true
