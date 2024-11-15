@@ -23,4 +23,31 @@ class ItemController < ApplicationController
             render :create_listing_form, status: :unprocessable_entity
         end
     end
+
+    def show_listing
+            @item = Item.find(params[:id])
+    end
+
+    def create_order
+        # Ensure the user is logged in
+        unless session[:user]
+          redirect_to login_path and return
+        end
+    
+        # Find the item to be ordered
+        @item = Item.find(params[:id])
+        
+        # Create a new order with item, user, and quantity parameters
+        @order = Order.new(
+          item: @item,
+          user: User.find(session[:user]["id"]),
+          quantity: params[:quantity]
+        )
+        
+        if @order.save
+          redirect_to item_path(@item), notice: "Order placed successfully!"
+        else
+          redirect_to item_path(@item), alert: @order.errors.full_messages.join(", ")
+        end
+      end
 end

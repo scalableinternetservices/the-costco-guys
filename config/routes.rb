@@ -17,4 +17,7 @@ Rails.application.routes.draw do
 
   get "create_listing" => "item#create_listing_form"
   post "create_listing" => "item#handle_create_listing"
+
+  get "item/:id" => "item#show_listing", as: :item
+  post "item/:id/order" => "item#create_order", as: :create_order
 end

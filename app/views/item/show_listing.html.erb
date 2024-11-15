@@ -1,0 +1,23 @@
+<h1><%= @item.name %></h1>
+<p><strong>Description:</strong> <%= @item.description %></p>
+<p><strong>Price:</strong> <%= number_to_currency(@item.price) %></p>
+<p><strong>Seller:</strong> <%= @item.user.username %></p>
+
+<% if session[:user] %>
+  <%= form_with url: create_order_path(@item), local: true do |form| %>
+    <div>
+      <%= form.label :quantity, "Quantity" %>
+      <%= form.number_field :quantity, min: 1, value: 1 %>
+    </div>
+    <%= form.submit "Place Order" %>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <p class="notice-message"><%= flash[:notice] %></p>
+  <% end %>
+
+<% else %>
+  <p>Please <a href="<%= login_path %>">log in</a> to place an order.</p>
+<% end %>
+
+<p><strong>Reviews:</strong> </p>
