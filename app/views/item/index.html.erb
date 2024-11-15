@@ -15,6 +15,14 @@
 <h2>Listings: </h2>
 <ul>
     <% @items.each do |item| %>
-        <li><%= item.name %></li>
+        <li>    
+            <div class="item">
+                <h2><%= item.name %></h2>
+                <p><strong>Description:</strong> <%= item.description %></p>
+                <p><strong>Price:</strong> <%= number_to_currency(item.price) %></p>
+                <p><strong>Seller:</strong> <%= item.user.username %></p>
+                <p><strong>Rating:</strong> TODO</p>
+            </div>
+        </li>
     <% end %>
 </ul>
