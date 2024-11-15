@@ -14,7 +14,7 @@ class SessionController < ApplicationController
             session[:user] = user
             redirect_to root_path
         else
-            @msg = "Invalid email or password"
+            @msg = "Invalid username or password"
             render :login_form, status: :unprocessable_entity
         end
     end
