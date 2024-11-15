@@ -14,4 +14,7 @@ Rails.application.routes.draw do
   get "login" => "session#login_form"
   post "login" => "session#handle_login"
   get "logout" => "session#handle_logout"
+
+  get "create_listing" => "item#create_listing_form"
+  post "create_listing" => "item#handle_create_listing"
 end

@@ -15,7 +15,6 @@ class UserController < ApplicationController
             session[:user] = @user
             redirect_to root_path
         else
-            puts @user.errors.full_messages.join(', ')
             render :register_form, status: :unprocessable_entity
         end
     end

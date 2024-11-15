@@ -1,0 +1,20 @@
+<%= form_with model: @item, url: "/create_listing", method: :post do |form| %>
+    <%= form.label :name, "Name:" %>
+    <%= form.text_field :name %>
+    <br>
+    <%= form.label :description, "Description:" %>
+    <%= form.text_field :description %>
+    <br>
+    <%= form.label :price, "Price:" %>
+    <%= form.text_field :price %>
+    <br>
+    <%= form.submit "Submit" %>
+    <br>
+    <% if @item.errors.any? %>
+        <ul>
+            <% @item.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+        </ul>
+    <% end %>
+<% end %>

@@ -1,12 +1,13 @@
 class ApplicationController < ActionController::Base
-    before_action :set_username
+    before_action :process_user
 
-    def set_username
+    def process_user
         if session[:user]
             @username = session[:user]["username"]
+            @loggedin = true
         else
             @username = "Guest"
+            @loggedin = false
         end
-        
     end
 end
