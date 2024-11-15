@@ -1,1 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one:
+  username: "testuser_yml"
+  password_digest: <%= BCrypt::Password.create("password") %>
+
+two:
+  username: "anotheruser_yml"
+  password_digest: <%= BCrypt::Password.create("anotherpassword") %>
