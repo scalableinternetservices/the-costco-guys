@@ -18,4 +18,8 @@ class UserController < ApplicationController
             render :register_form, status: :unprocessable_entity
         end
     end
+
+    def show_profile        
+        @orders = Order.includes(:item).where(user_id: session[:user]['id'])
+    end
 end

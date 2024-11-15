@@ -1,0 +1,23 @@
+<h1><%= @username %></h1>
+<h2><strong>Your Order History:</strong></h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Item Name</th>
+      <th>Quantity</th>
+      <th>Item Price</th>
+      <th>Total Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.item.name %></td>
+        <td><%= order.quantity %></td>
+        <td><%= order.item.price %></td>
+        <td><%= order.quantity * order.item.price %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

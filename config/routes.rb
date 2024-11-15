@@ -20,4 +20,6 @@ Rails.application.routes.draw do
 
   get "item/:id" => "item#show_listing", as: :item
   post "item/:id/order" => "item#create_order", as: :create_order
+
+  get "profile" => "user#show_profile"
 end

@@ -1,11 +1,4 @@
 <h1>Welcome, <%= @username %></h1>
-<div style="position: absolute;top: 0;right: 0;">
-    <% if @loggedin %>
-        <a href="logout">Log Out</a>
-    <% else %>
-        <a href="login">Log In</a>&nbsp;&nbsp;&nbsp;<a href="register">Register</a>
-    <% end %>
-</div>
 
 <% if @loggedin %>
     <a href="create_listing">Create a new listing</a>
