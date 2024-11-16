@@ -20,4 +20,36 @@
   <p>Please <a href="<%= login_path %>">log in</a> to place an order.</p>
 <% end %>
 
-<p><strong>Reviews:</strong> </p>
+<div class="reviews-section">
+    <h2>Reviews</h2>
+    
+    <% if session[:user] %>
+        <div class="review-form">
+            <h3>Add Your Review</h3>
+            <%= form_with(url: add_review_path(@item), local: true) do |form| %>
+              <div>
+                  <%= form.label :score, "Rating (1-5 stars)" %>
+                  <%= form.select "rating[score]", options_for_select(1..5) %>
+              </div>
+              <div>
+                  <%= form.label :comment, "Your Review" %>
+                  <%= form.text_area "rating[comment]", rows: 4 %>
+              </div>
+              <%= form.hidden_field :item_id, value: @item.id %>
+              <%= form.submit "Submit Review", class: "submit-button" %>
+          <% end %>
+        </div>
+    <% end %>
+
+    <div class="reviews-list">
+        <% @item.ratings.includes(:user).order(created_at: :desc).each do |rating| %>
+            <div class="review">
+                <div class="stars">
+                    <% rating.score.times do %>⭐<% end %>
+                </div>
+                <p class="review-comment"><%= rating.comment %></p>
+                <p class="review-author">- <%= rating.user.username %></p>
+            </div>
+        <% end %>
+    </div>
+</div>

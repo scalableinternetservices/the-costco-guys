@@ -25,7 +25,8 @@ class ItemController < ApplicationController
     end
 
     def show_listing
-            @item = Item.find(params[:id])
+      @item = Item.find(params[:id])
+      @ratings = @item.ratings.includes(:user).order(created_at: :desc)
     end
 
     def create_order

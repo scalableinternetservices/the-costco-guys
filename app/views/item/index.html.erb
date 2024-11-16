@@ -14,7 +14,7 @@
                 <p><strong>Description:</strong> <%= item.description %></p>
                 <p><strong>Price:</strong> <%= number_to_currency(item.price) %></p>
                 <p><strong>Seller:</strong> <%= item.user.username %></p>
-                <p><strong>Reviews:</strong> TODO</p>
+                <p><strong>Reviews:</strong> <%= item.ratings.count %></p>
             </div>
         </li>
     <% end %>
