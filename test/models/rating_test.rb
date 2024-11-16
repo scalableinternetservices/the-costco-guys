@@ -4,7 +4,7 @@ class RatingTest < ActiveSupport::TestCase
   def setup
     @user = User.create(username: "testuser", password: "password123")
     @item = Item.create(name: "Test Item", description: "A test item")
-    @rating = Rating.new(user: @user, item: @item, comment: "Great item!")
+    @rating = Rating.new(user: @user, item: @item, comment: "Great item!", score: 5)
   end
 
   test "should be valid with user, item, and comment" do
