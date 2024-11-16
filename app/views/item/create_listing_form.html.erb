@@ -8,6 +8,9 @@
     <%= form.label :price, "Price:" %>
     <%= form.text_field :price %>
     <br>
+    <%= form.label :quantity, "Initial Quantity:" %>
+    <%= form.number_field :quantity, min: 0 %>
+    <br>
     <%= form.submit "Submit" %>
     <br>
     <% if @item.errors.any? %>

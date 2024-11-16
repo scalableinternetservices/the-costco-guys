@@ -14,7 +14,7 @@ class ItemController < ApplicationController
         if !session[:user]
             redirect_to root_path
         end
-        @item = Item.new(params.require(:item).permit(:name, :description, :price))
+        @item = Item.new(params.require(:item).permit(:name, :description, :price, :quantity))
         @item.user = User.find(session[:user]["id"])
         if @item.save
             redirect_to root_path
@@ -30,19 +30,25 @@ class ItemController < ApplicationController
     end
 
     def create_order
-        # Ensure the user is logged in
         unless session[:user]
           redirect_to login_path and return
         end
-    
-        # Find the item to be ordered
+
         @item = Item.find(params[:id])
         
-        # Create a new order with item, user, and quantity parameters
+        if @item.sold_out?
+          redirect_to item_path(@item), alert: "Sorry, this item is sold out!" and return
+        end
+
+        requested_quantity = params[:quantity].to_i
+        if requested_quantity > @item.remaining_quantity
+          redirect_to item_path(@item), alert: "Sorry, only #{@item.remaining_quantity} items available!" and return
+        end
+        
         @order = Order.new(
           item: @item,
           user: User.find(session[:user]["id"]),
-          quantity: params[:quantity]
+          quantity: requested_quantity
         )
         
         if @order.save
@@ -50,5 +56,5 @@ class ItemController < ApplicationController
         else
           redirect_to item_path(@item), alert: @order.errors.full_messages.join(", ")
         end
-      end
+    end
 end
