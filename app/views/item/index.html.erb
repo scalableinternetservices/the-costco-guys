@@ -16,6 +16,7 @@
                 <p><strong>Seller:</strong> <%= item.user.username %></p>
                 <p><strong>Reviews:</strong> <%= item.ratings.count %></p>
                 <p><strong>Available Quantity:</strong> <%= item.remaining_quantity %></p>
+                <p><small>Listed on <%= item.created_at.in_time_zone('Pacific Time (US & Canada)').strftime("%B %d, %Y at %I:%M %p %Z") %></small></p>
                 <% if item.sold_out? %>
                     <p class="sold-out">SOLD OUT</p>
                 <% end %>
