@@ -20,6 +20,7 @@
                 <% if item.sold_out? %>
                     <p class="sold-out">SOLD OUT</p>
                 <% end %>
+                <p><strong>Average Rating:</strong> <%= item.average_rating %> / 5</p>
             </div>
         </li>
     <% end %>
