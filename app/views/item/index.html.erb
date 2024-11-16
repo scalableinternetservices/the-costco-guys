@@ -15,6 +15,7 @@
                 <p><strong>Price:</strong> <%= number_to_currency(item.price) %></p>
                 <p><strong>Seller:</strong> <%= item.user.username %></p>
                 <p><strong>Reviews:</strong> <%= item.ratings.count %></p>
+                <p><strong>Average Rating:</strong> <%= item.average_rating %> / 5</p>
             </div>
         </li>
     <% end %>
