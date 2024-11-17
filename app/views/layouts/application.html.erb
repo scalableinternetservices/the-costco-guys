@@ -11,13 +11,15 @@
   </head>
 
   <body>
-    <div style="position: absolute;top: 0;right: 0;">
-      <% if @loggedin %>
-        <%= link_to "Log Out", "/logout" %> <%= link_to "Profile", "/profile" %>
-      <% else %>
+    <% unless current_page?(login_path) || current_page?(register_path) %>
+      <div class="nav-links">
+        <% if @loggedin %>
+          <%= link_to "Log Out", "/logout" %> <%= link_to "Profile", "/profile" %>
+        <% else %>
           <%= link_to "Log In", "/login" %> <%= link_to "Register", "/register" %>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
+    <% end %>
     <%= yield %>
   </body>
 </html>
