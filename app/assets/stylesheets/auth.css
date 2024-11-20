@@ -91,15 +91,21 @@ body {
 }
 
 /* Navigation links in header */
+.left-nav {
+  position: absolute;
+  top: 10px;
+  left: 0px;
+}
+
 .nav-links {
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 20px;
   display: flex;
   gap: 15px;
 }
 
-.nav-links a {
+.left-nav a, .nav-links a {
   color: #3498db;
   text-decoration: none;
   font-size: 14px;
@@ -109,7 +115,7 @@ body {
   transition: background-color 0.2s;
 }
 
-.nav-links a:hover {
+.left-nav a:hover, .nav-links a:hover {
   background-color: rgba(52, 152, 219, 0.1);
 }
 
@@ -135,4 +141,9 @@ body {
 
 .home-link:hover {
   color: #3498db;
+}
+
+/* Add padding to main content when on profile page */
+body.profile-page {
+  padding-top: 35px;  /* Adjust this value as needed */
 }

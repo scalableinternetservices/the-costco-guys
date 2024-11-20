@@ -10,8 +10,14 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="<%= 'profile-page' if current_page?(profile_path) || current_page?(create_listing_path) %>">
     <% unless current_page?(login_path) || current_page?(register_path) %>
+      <% unless current_page?(root_path)%>
+        <div class="left-nav">
+          <%= link_to "Back to Home", root_path, class: "nav-link" %>
+        </div>
+      <% end %>
+      
       <div class="nav-links">
         <% if @loggedin %>
           <%= link_to "Log Out", "/logout" %> <%= link_to "Profile", "/profile" %>
