@@ -142,8 +142,3 @@ body {
 .home-link:hover {
   color: #3498db;
 }
-
-/* Add padding to main content when on profile page */
-body.profile-page {
-  padding-top: 35px;  /* Adjust this value as needed */
-}
