@@ -1,0 +1,35 @@
+<div class="conversation-container">
+  <h1>Conversation with <%= @user2.username %></h1>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <div class="messages-list">
+    <% @messages.each do |message| %>
+      <div class="message <%= message.from_id == session[:user]["id"] ? 'sent' : 'received' %>">
+        <div class="message-content">
+          <%= message.content %>
+        </div>
+        <div class="message-timestamp">
+          <%= time_ago_in_words(message.created_at) %> ago
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= form_with(model: @new_message, url: conversation_path(@user2), local: true) do |f| %>
+    <div class="message-form">
+      <%= f.text_area :content, placeholder: "Enter message...", class: "message-input" %>
+      <%= f.submit "Send", class: "send-button" %>
+    </div>
+  <% end %>
+</div>

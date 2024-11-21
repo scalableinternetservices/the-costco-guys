@@ -1,7 +1,13 @@
 <h1><%= @item.name %></h1>
 <p><strong>Description:</strong> <%= @item.description %></p>
 <p><strong>Price:</strong> <%= number_to_currency(@item.price) %></p>
-<p><strong>Seller:</strong> <%= @item.user.username %></p>
+<p><strong>Seller:</strong> 
+    <% if session[:user] && session[:user]["id"] != @item.user.id %>
+        <%= link_to @item.user.username, conversation_path(@item.user) %>
+    <% else %>
+        <%= @item.user.username %>
+    <% end %>
+</p>
 <p><strong>Average Rating:</strong> <%= @item.average_rating %> / 5</p>
 <p><strong>Available Quantity:</strong> <%= @item.remaining_quantity %></p>
 
@@ -22,7 +28,7 @@
     <p class="notice-message"><%= flash[:notice] %></p>
   <% end %>
 <% else %>
-  <p>Please <a href="<%= login_path %>">log in</a> to place an order.</p>
+  <p>Please <a href="<%= login_path %>">log in</a> to place an order and send messages.</p>
 <% end %>
 
 <div class="reviews-section">
