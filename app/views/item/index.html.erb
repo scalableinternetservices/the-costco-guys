@@ -13,8 +13,14 @@
                 <h2><%= link_to item.name, item_path(item) %></h2>
                 <p><strong>Description:</strong> <%= item.description %></p>
                 <p><strong>Price:</strong> <%= number_to_currency(item.price) %></p>
-                <p><strong>Seller:</strong> <%= item.user.username %></p>
-                <p><strong>Reviews:</strong> <%= item.review_summary %></p>
+                <p><strong>Seller:</strong> 
+                    <% if session[:user] && session[:user]["id"] != item.user.id %>
+                        <%= link_to item.user.username, conversation_path(item.user) %>
+                    <% else %>
+                        <%= item.user.username %>
+                    <% end %>
+                </p>
+                <p><strong>Reviews:</strong> <%= item.ratings.count %></p>
                 <p><strong>Available Quantity:</strong> <%= item.remaining_quantity %></p>
                 <p><small>Listed on <%= item.created_at.in_time_zone('Pacific Time (US & Canada)').strftime("%B %d, %Y at %I:%M %p %Z") %></small></p>
                 <% if item.sold_out? %>

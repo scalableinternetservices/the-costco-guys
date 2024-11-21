@@ -21,5 +21,6 @@ class UserController < ApplicationController
 
     def show_profile        
         @orders = Order.includes(:item).where(user_id: session[:user]['id'])
+        @listed_items = Item.where(user_id: session[:user]['id']).order(created_at: :desc)
     end
 end

@@ -1,0 +1,17 @@
+<div class="messages-container">
+  <h1>Your Messages</h1>
+  
+  <% if @users.empty? %>
+    <p>No messages yet!</p>
+  <% else %>
+    <div class="conversations-list">
+      <% @users.each do |user| %>
+        <%= link_to conversation_path(user), class: "conversation-item" do %>
+          <div class="user-info">
+            <h3><%= user.username %></h3>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

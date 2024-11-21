@@ -24,4 +24,8 @@ Rails.application.routes.draw do
   post "item/:id/review" => "ratings#create_rating", as: :add_review
 
   get "profile" => "user#show_profile"
+
+  get "messages" => "message#index"
+  get "messages/:user_id" => "message#show_messages", as: :conversation
+  post "messages/:user_id" => "message#create"
 end

@@ -1,0 +1,25 @@
+/* Add padding to main content when on profile page */
+body.profile-page {
+    padding-top: 35px;  /* Adjust this value as needed */
+}
+
+.profile-table {
+    border-collapse: separate;
+    border-spacing: 20px 0;
+}
+  
+  .profile-table th,
+  .profile-table td {
+    padding-bottom: 15px;
+    text-align: left;
+  }
+  
+  .wrapped-item {
+    word-wrap: break-word;
+    max-width: 300px;
+  }
+  
+  .wrapped-description {
+    word-wrap: break-word;
+    max-width: 300px;
+  }
