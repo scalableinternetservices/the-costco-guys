@@ -1,23 +1,37 @@
-<%= form_with model: @item, url: "/create_listing", method: :post do |form| %>
-    <%= form.label :name, "Name:" %>
-    <%= form.text_field :name %>
-    <br>
-    <%= form.label :description, "Description:" %>
-    <%= form.text_field :description %>
-    <br>
-    <%= form.label :price, "Price:" %>
-    <%= form.text_field :price %>
-    <br>
-    <%= form.label :quantity, "Initial Quantity:" %>
-    <%= form.number_field :quantity, min: 0 %>
-    <br>
-    <%= form.submit "Submit" %>
-    <br>
+<div class="create-listing-container">
+  <h1>Create New Listing</h1>
+  
+  <%= form_with model: @item, url: "/create_listing", method: :post, class: "create-listing-form" do |form| %>
+    <div class="listing-form-group">
+      <%= form.label :name, "Item Name" %>
+      <%= form.text_field :name, placeholder: "Enter the item name" %>
+    </div>
+
+    <div class="listing-form-group">
+      <%= form.label :description, "Description" %>
+      <%= form.text_area :description, placeholder: "Describe your item" %>
+    </div>
+
+    <div class="listing-form-group">
+      <%= form.label :price, "Price ($)" %>
+      <%= form.text_field :price, placeholder: "0.00", type: "number", step: "0.01", min: "0" %>
+    </div>
+
+    <div class="listing-form-group">
+      <%= form.label :quantity, "Initial Quantity" %>
+      <%= form.number_field :quantity, min: 1, placeholder: "Enter quantity available" %>
+    </div>
+
+    <%= form.submit "Create Listing", class: "listing-submit" %>
+
     <% if @item.errors.any? %>
+      <div class="listing-errors">
         <ul>
-            <% @item.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-            <% end %>
+          <% @item.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
         </ul>
+      </div>
     <% end %>
-<% end %>
+  <% end %>
+</div>

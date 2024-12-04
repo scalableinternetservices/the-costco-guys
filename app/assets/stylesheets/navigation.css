@@ -1,0 +1,64 @@
+.nav-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 15px 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.left-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: #f8f9fa;
+  color: #3498db;
+}
+
+.nav-link.active {
+  background-color: #3498db;
+  color: white;
+}
+
+.nav-link.active:hover {
+  background-color: #2980b9;
+  color: white;
+}
+
+.nav-link.logout {
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.nav-link.logout:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Add padding to body to account for fixed nav */
+body {
+  padding-top: 65px;
+} 

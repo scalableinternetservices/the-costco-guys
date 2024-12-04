@@ -1,65 +1,87 @@
-<h1><%= @username%>'s  Profile</h1>
+<div class="profile-container">
+  <div class="profile-header">
+    <h1 class="profile-title"><%= @username %>'s Profile</h1>
+  </div>
 
-<h2><strong>Your Listed Items:</strong></h2>
-<% if @listed_items.empty? %>
-  <p>No items listed yet.</p>
-<% else %>
-<table class="profile-table">
-  <thead>
-    <tr>
-      <th>Item Name</th>
-      <th>Price</th>
-      <th>Description</th>
-      <th>Remaining Quantity</th>
-      <th>Purchased By</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @listed_items.each do |item| %>
-      <tr>
-        <td class="wrapped-item"><%= item.name %></td>
-        <td><%= item.price %></td>
-        <td class="wrapped-description"><%= item.description %></td>
-        <td><%= item.remaining_quantity %></td>
-        <td>
-        <% if item.orders.any? %>
-            <ul style="list-style-type: none; padding-left: 0;">
-              <% item.orders.each do |order| %>
-                <li><%= order.user.username %> (Qty: <%= order.quantity %>)</li>
-              <% end %>
-            </ul>
-          <% else %>
-            No purchases yet
+  <div class="profile-section">
+    <h2 class="profile-section-title">Your Listed Items</h2>
+    
+    <% if @listed_items.empty? %>
+      <div class="no-items-message">
+        <p>No items listed yet.</p>
+      </div>
+    <% else %>
+      <table class="profile-table">
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Available</th>
+            <th>Purchased By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @listed_items.each do |item| %>
+            <tr>
+              <td class="wrapped-item">
+                <%= link_to item.name, item_path(item), class: "seller-link" %>
+              </td>
+              <td class="price-column"><%= number_to_currency(item.price) %></td>
+              <td class="wrapped-description"><%= item.description %></td>
+              <td class="quantity-column"><%= item.remaining_quantity %></td>
+              <td>
+                <% if item.orders.any? %>
+                  <ul class="buyers-list">
+                    <% item.orders.each do |order| %>
+                      <li><%= order.user.username %> (Qty: <%= order.quantity %>)</li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <span class="text-muted">No purchases yet</span>
+                <% end %>
+              </td>
+            </tr>
           <% end %>
-        </td>
-      </tr>
+        </tbody>
+      </table>
     <% end %>
-  </tbody>
-</table>
-<% end %>
+  </div>
 
-<h2><strong>Your Order History:</strong></h2>
-<% if @orders.empty? %>
-  <p>No orders yet.</p>
-<% else %>
-<table class="profile-table">
-  <thead>
-    <tr>
-      <th>Item Name</th>
-      <th>Quantity</th>
-      <th>Item Price</th>
-      <th>Total Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @orders.each do |order| %>
-      <tr>
-        <td class="wrapped-item"><%= order.item.name %></td>
-        <td><%= order.quantity %></td>
-        <td><%= order.item.price %></td>
-        <td><%= order.quantity * order.item.price %></td>
-      </tr>
+  <div class="profile-section">
+    <h2 class="profile-section-title">Order History</h2>
+    
+    <% if @orders.empty? %>
+      <div class="no-items-message">
+        <p>No orders yet.</p>
+      </div>
+    <% else %>
+      <table class="profile-table">
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Seller</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+            <th>Order Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr>
+              <td class="wrapped-item">
+                <%= link_to order.item.name, item_path(order.item), class: "seller-link" %>
+              </td>
+              <td><%= order.item.user.username %></td>
+              <td class="quantity-column"><%= order.quantity %></td>
+              <td class="price-column"><%= number_to_currency(order.item.price) %></td>
+              <td class="price-column"><%= number_to_currency(order.item.price * order.quantity) %></td>
+              <td><%= order.created_at.strftime("%B %d, %Y") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <% end %>
-  </tbody>
-</table>
-<% end %>
+  </div>
+</div>

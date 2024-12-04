@@ -28,4 +28,6 @@ Rails.application.routes.draw do
   get "messages" => "message#index"
   get "messages/:user_id" => "message#show_messages", as: :conversation
   post "messages/:user_id" => "message#create"
+
+  post '/items/:item_id/ratings', to: 'ratings#create_rating', as: 'create_rating'
 end

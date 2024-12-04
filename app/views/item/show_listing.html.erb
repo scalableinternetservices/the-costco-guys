@@ -1,66 +1,104 @@
-<h1><%= @item.name %></h1>
-<p><strong>Description:</strong> <%= @item.description %></p>
-<p><strong>Price:</strong> <%= number_to_currency(@item.price) %></p>
-<p><strong>Seller:</strong> 
-    <% if session[:user] && session[:user]["id"] != @item.user.id %>
-        <%= link_to @item.user.username, conversation_path(@item.user) %>
-    <% else %>
-        <%= @item.user.username %>
-    <% end %>
-</p>
-<p><strong>Average Rating:</strong> <%= @item.average_rating %> / 5</p>
-<p><strong>Available Quantity:</strong> <%= @item.remaining_quantity %></p>
+<div class="item-details-container">
+  <div class="item-details-header">
+    <h1 class="item-details-title"><%= @item.name %></h1>
+    <p class="item-details-price"><%= number_to_currency(@item.price) %></p>
+  </div>
 
-<% if session[:user] %>
-  <% if @item.sold_out? %>
-    <p class="sold-out">SOLD OUT</p>
-  <% else %>
-    <%= form_with url: create_order_path(@item), local: true do |form| %>
-      <div>
-        <%= form.label :quantity, "Quantity" %>
-        <%= form.number_field :quantity, min: 1, max: @item.remaining_quantity, value: 1 %>
-      </div>
-      <%= form.submit "Place Order" %>
-    <% end %>
-  <% end %>
+  <div class="item-details-grid">
+    <div class="item-details-main">
+      <p class="item-details-info">
+        <strong>Description:</strong><br>
+        <%= @item.description %>
+      </p>
+      
+      <p class="item-details-info">
+        <strong>Seller:</strong>
+        <% if session[:user] && session[:user]["id"] != @item.user.id %>
+          <%= link_to @item.user.username, conversation_path(@item.user), class: "item-details-seller" %>
+        <% else %>
+          <span class="item-details-seller"><%= @item.user.username %></span>
+        <% end %>
+      </p>
 
-  <% if flash[:notice] %>
-    <p class="notice-message"><%= flash[:notice] %></p>
-  <% end %>
-<% else %>
-  <p>Please <a href="<%= login_path %>">log in</a> to place an order and send messages.</p>
+      <p class="item-details-info">
+        <strong>Average Rating:</strong> <%= @item.average_rating %> / 5
+      </p>
+
+      <p class="item-details-info">
+        <strong>Available Quantity:</strong> <%= @item.remaining_quantity %>
+      </p>
+    </div>
+
+    <div class="item-details-sidebar">
+      <% if session[:user] %>
+        <% if @item.sold_out? %>
+          <div class="sold-out-label">SOLD OUT</div>
+        <% else %>
+          <div class="order-section">
+            <%= form_with url: create_order_path(@item), local: true do |form| %>
+              <div class="quantity-input">
+                <%= form.label :quantity, "Quantity:" %>
+                <%= form.number_field :quantity, min: 1, max: @item.remaining_quantity, value: 1 %>
+              </div>
+              <%= form.submit "Place Order", class: "place-order-btn" %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <% if flash[:notice] %>
+          <p class="notice-message"><%= flash[:notice] %></p>
+        <% end %>
+      <% else %>
+        <div class="login-message">
+          Please <%= link_to "log in", login_path, class: "item-details-seller" %> to place an order and send messages.
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if flash[:notice] %>
+  <div class="success-notice">
+    <%= flash[:notice] %>
+  </div>
 <% end %>
 
 <div class="reviews-section">
-    <h2>Reviews</h2>
-    
-    <% if session[:user] %>
-        <div class="review-form">
-            <h3>Add Your Review</h3>
-            <%= form_with(url: add_review_path(@item), local: true) do |form| %>
-              <div>
-                  <%= form.label :score, "Rating (1-5 stars)" %>
-                  <%= form.select "rating[score]", options_for_select(1..5) %>
-              </div>
-              <div>
-                  <%= form.label :comment, "Your Review" %>
-                  <%= form.text_area "rating[comment]", rows: 4 %>
-              </div>
-              <%= form.hidden_field :item_id, value: @item.id %>
-              <%= form.submit "Submit Review", class: "submit-button" %>
-          <% end %>
+  <h2>Reviews</h2>
+  
+  <% if session[:user] %>
+    <div class="review-form">
+      <h3>Add Your Review</h3>
+      <%= form_with url: create_rating_path(@item), local: true do |form| %>
+        <div>
+          <%= form.text_area :comment, name: 'rating[comment]', placeholder: "Write your review here...", class: "review-input" %>
         </div>
-    <% end %>
-
-    <div class="reviews-list">
-        <% @item.ratings.includes(:user).order(created_at: :desc).each do |rating| %>
-            <div class="review">
-                <div class="stars">
-                    <% rating.score.times do %>⭐<% end %>
-                </div>
-                <p class="review-comment"><%= rating.comment %></p>
-                <p class="review-author">- <%= rating.user.username %></p>
-            </div>
-        <% end %>
+        <div>
+          <%= form.select :score, options_for_select(1..5), { prompt: "Select rating" }, { name: 'rating[score]', class: "rating-select" } %>
+        </div>
+        <%= form.submit "Submit Review", class: "submit-review" %>
+      <% end %>
     </div>
+  <% end %>
+
+  <div class="reviews-list">
+    <% if @ratings.any? %>
+      <% @ratings.each do |rating| %>
+        <div class="review-card">
+          <div class="review-header">
+            <span class="reviewer-name"><%= rating.user.username %></span>
+            <span class="review-rating"><%= "★" * rating.score %><%= "☆" * (5 - rating.score) %></span>
+          </div>
+          <p class="review-content"><%= rating.comment %></p>
+          <div class="review-date">
+            Posted <%= time_ago_in_words(rating.created_at) %> ago
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="no-reviews">
+        No reviews yet. Be the first to review this item!
+      </div>
+    <% end %>
+  </div>
 </div>
