@@ -10,15 +10,19 @@
 require 'faker'
 
 # Create a user to associate with the items
-user = User.create(username: "test_seller", password: "test_seller")
+user = User.find_or_create_by(username: "test_seller") do |u|
+  u.password = "test_seller"
+end
 
-# Generate 1000 items
-1000.times do
-  Item.create(
-    user: user,
-    name: Faker::Commerce.product_name,
-    description: Faker::Lorem.sentence(word_count: 10),
-    price: Faker::Commerce.price(range: 1.0..100.0),
-    quantity: rand(1..100) # Random quantity between 1 and 100
-  )
+# Generate items only if we don't have enough
+if Item.count < 1000
+  (1000 - Item.count).times do
+    Item.create(
+      user: user,
+      name: Faker::Commerce.product_name,
+      description: Faker::Lorem.sentence(word_count: 10),
+      price: Faker::Commerce.price(range: 1.0..100.0),
+      quantity: rand(1..100)
+    )
+  end
 end
