@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   get "item/:id" => "item#show_listing", as: :item
   post "item/:id/order" => "item#create_order", as: :create_order
+  get "items" => "item#index", as: :items
 
   post "item/:id/review" => "ratings#create_rating", as: :add_review
 

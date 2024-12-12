@@ -36,3 +36,5 @@ gem 'jwt'
 gem 'rails-controller-testing'
 
 gem 'faker'
+
+gem 'kaminari'

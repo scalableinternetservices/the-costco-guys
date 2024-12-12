@@ -1,6 +1,6 @@
 class ItemController < ApplicationController
     def index
-        @items = Item.order(created_at: :desc)
+        @items = Item.order(created_at: :desc).page(params[:page]).per(25)
     end
 
     def create_listing_form
