@@ -8,8 +8,15 @@ class Item < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
+  # Add cache versioning
+  def cache_key_with_version
+    "#{super}-#{ratings.maximum(:updated_at)&.utc&.to_s(:usec)}"
+  end
+
   def average_rating
-    ratings.average(:score).to_f.round(2)
+    Rails.cache.fetch([self, "average_rating"]) do
+      ratings.average(:score).to_f.round(2)
+    end
   end
 
   def sold_out?
@@ -17,14 +24,18 @@ class Item < ApplicationRecord
   end
 
   def remaining_quantity
-    quantity - orders.sum(:quantity)
+    Rails.cache.fetch([self, "remaining_quantity"]) do
+      quantity - orders.sum(:quantity)
+    end
   end
 
   def review_summary
-    count = ratings.count
-    return "No reviews yet" if count == 0
-    
-    avg = ratings.average(:score)&.round(1)
-    "#{count} #{'review'.pluralize(count)} (#{avg} / 5.0)"
+    Rails.cache.fetch([self, "review_summary"]) do
+      count = ratings.count
+      return "No reviews yet" if count == 0
+      
+      avg = ratings.average(:score)&.round(1)
+      "#{count} #{'review'.pluralize(count)} (#{avg} / 5.0)"
+    end
   end
 end
