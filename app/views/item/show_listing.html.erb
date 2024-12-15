@@ -1,61 +1,63 @@
-<div class="item-details-container">
-  <div class="item-details-header">
-    <h1 class="item-details-title"><%= @item.name %></h1>
-    <p class="item-details-price"><%= number_to_currency(@item.price) %></p>
-  </div>
-
-  <div class="item-details-grid">
-    <div class="item-details-main">
-      <p class="item-details-info">
-        <strong>Description:</strong><br>
-        <%= @item.description %>
-      </p>
-      
-      <p class="item-details-info">
-        <strong>Seller:</strong>
-        <% if session[:user] && session[:user]["id"] != @item.user.id %>
-          <%= link_to @item.user.username, conversation_path(@item.user), class: "item-details-seller" %>
-        <% else %>
-          <span class="item-details-seller"><%= @item.user.username %></span>
-        <% end %>
-      </p>
-
-      <p class="item-details-info">
-        <strong>Average Rating:</strong> <%= @item.average_rating %> / 5
-      </p>
-
-      <p class="item-details-info">
-        <strong>Available Quantity:</strong> <%= @item.remaining_quantity %>
-      </p>
+<% cache @item do %>
+  <div class="item-details-container">
+    <div class="item-details-header">
+      <h1 class="item-details-title"><%= @item.name %></h1>
+      <p class="item-details-price"><%= number_to_currency(@item.price) %></p>
     </div>
 
-    <div class="item-details-sidebar">
-      <% if session[:user] %>
-        <% if @item.sold_out? %>
-          <div class="sold-out-label">SOLD OUT</div>
+    <div class="item-details-grid">
+      <div class="item-details-main">
+        <p class="item-details-info">
+          <strong>Description:</strong><br>
+          <%= @item.description %>
+        </p>
+        
+        <p class="item-details-info">
+          <strong>Seller:</strong>
+          <% if session[:user] && session[:user]["id"] != @item.user.id %>
+            <%= link_to @item.user.username, conversation_path(@item.user), class: "item-details-seller" %>
+          <% else %>
+            <span class="item-details-seller"><%= @item.user.username %></span>
+          <% end %>
+        </p>
+
+        <% cache [@item, "rating_info"] do %>
+          <p class="item-details-info">
+            <strong>Average Rating:</strong> <%= @item.average_rating %> / 5
+          </p>
+          <p class="item-details-info">
+            <strong>Available Quantity:</strong> <%= @item.remaining_quantity %>
+          </p>
+        <% end %>
+      </div>
+      <div class="item-details-sidebar">
+        <% if session[:user] %>
+          <% if @item.sold_out? %>
+            <div class="sold-out-label">SOLD OUT</div>
+          <% else %>
+            <div class="order-section">
+              <%= form_with url: create_order_path(@item), local: true do |form| %>
+                <div class="quantity-input">
+                  <%= form.label :quantity, "Quantity:" %>
+                  <%= form.number_field :quantity, min: 1, max: @item.remaining_quantity, value: 1 %>
+                </div>
+                <%= form.submit "Place Order", class: "place-order-btn" %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if flash[:notice] %>
+            <p class="notice-message"><%= flash[:notice] %></p>
+          <% end %>
         <% else %>
-          <div class="order-section">
-            <%= form_with url: create_order_path(@item), local: true do |form| %>
-              <div class="quantity-input">
-                <%= form.label :quantity, "Quantity:" %>
-                <%= form.number_field :quantity, min: 1, max: @item.remaining_quantity, value: 1 %>
-              </div>
-              <%= form.submit "Place Order", class: "place-order-btn" %>
-            <% end %>
+          <div class="login-message">
+            Please <%= link_to "log in", login_path, class: "item-details-seller" %> to place an order and send messages.
           </div>
         <% end %>
-
-        <% if flash[:notice] %>
-          <p class="notice-message"><%= flash[:notice] %></p>
-        <% end %>
-      <% else %>
-        <div class="login-message">
-          Please <%= link_to "log in", login_path, class: "item-details-seller" %> to place an order and send messages.
-        </div>
-      <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
 
 <% if flash[:notice] %>
   <div class="success-notice">

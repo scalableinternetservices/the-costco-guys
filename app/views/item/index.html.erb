@@ -1,50 +1,56 @@
 <div class="listings-container">
   <div class="listings-header">
-    <h1 class="listings-title">Marketplace</h1>
+    <h1 class="listings-title">Welcome to Boom! Wholesale</h1>
   </div>
 
   <ul class="listings-grid">
-    <% @items.each do |item| %>
-      <li>
-        <%= link_to item_path(item), class: "item-card" do %>
-          <% if item.sold_out? %>
-            <div class="sold-out-badge">SOLD OUT</div>
-          <% end %>
-          
-          <div class="item-content">
-            <h2 class="item-title"><%= item.name %></h2>
-            
-            <p class="item-info">
-              <%= truncate(item.description, length: 100) %>
-            </p>
-            
-            <p class="item-price">
-              <%= number_to_currency(item.price) %>
-            </p>
-            
-            <p class="item-info">
-              <strong>Available:</strong> <%= item.remaining_quantity %> units
-            </p>
-            
-            <div class="item-seller">
-              <strong>Seller:</strong> <%= item.user.username %>
-            </div>
-          </div>
+    <% cache [Item.maximum(:updated_at), @items.current_page] do %>
+      <% @items.each do |item| %>
+        <% cache item do %>
+          <li>
+            <%= link_to item_path(item), class: "item-card" do %>
+              <% if item.sold_out? %>
+                <div class="sold-out-badge">SOLD OUT</div>
+              <% end %>
+              
+              <div class="item-content">
+                <h2 class="item-title"><%= item.name %></h2>
+                
+                <p class="item-info">
+                  <%= truncate(item.description, length: 100) %>
+                </p>
+                
+                <p class="item-price">
+                  <%= number_to_currency(item.price) %>
+                </p>
+                
+                <% cache [item, "availability"] do %>
+                  <p class="item-info">
+                    <strong>Available:</strong> <%= item.remaining_quantity %> units
+                  </p>
+                <% end %>
+                
+                <div class="item-seller">
+                  <strong>Seller:</strong> <%= item.user.username %>
+                </div>
+              </div>
 
-          <div class="item-footer">
-            <small>Listed <%= time_ago_in_words(item.created_at) %> ago</small>
-            <% if item.ratings.any? %>
-              • <%= item.review_summary %>
+              <div class="item-footer">
+                <small>Listed <%= time_ago_in_words(item.created_at) %> ago</small>
+                <% cache [item, "reviews"] do %>
+                  <% if item.ratings.any? %>
+                    • <%= item.review_summary %>
+                  <% end %>
+                <% end %>
+              </div>
             <% end %>
-          </div>
+          </li>
         <% end %>
-      </li>
+      <% end %>
     <% end %>
   </ul>
 
   <% if @loggedin %>
-    <%= link_to "Create a new listing", create_listing_path, class: "create-listing-btn" %>
-  <% else %>
-    <p class="login-prompt">Log in to create a new listing</p>
+    <%= link_to "Create New Listing", create_listing_path, class: "create-listing-btn" %>
   <% end %>
 </div>

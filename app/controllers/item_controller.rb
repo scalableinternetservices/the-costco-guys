@@ -1,6 +1,9 @@
 class ItemController < ApplicationController
     def index
-        @items = Item.order(created_at: :desc)
+        @items = Item.includes(:user, :ratings)
+                     .order(created_at: :desc)
+                     .page(params[:page])
+                     .per(25)
     end
 
     def create_listing_form
@@ -25,8 +28,8 @@ class ItemController < ApplicationController
     end
 
     def show_listing
-      @item = Item.find(params[:id])
-      @ratings = @item.ratings.includes(:user).order(created_at: :desc)
+        @item = Item.includes(:user, ratings: :user).find(params[:id])
+        @ratings = @item.ratings.order(created_at: :desc)
     end
 
     def create_order
@@ -34,7 +37,7 @@ class ItemController < ApplicationController
           redirect_to login_path and return
         end
 
-        @item = Item.find(params[:id])
+        @item = Item.includes(:orders).find(params[:id])
         
         if @item.sold_out?
           redirect_to item_path(@item), alert: "Sorry, this item is sold out!" and return
